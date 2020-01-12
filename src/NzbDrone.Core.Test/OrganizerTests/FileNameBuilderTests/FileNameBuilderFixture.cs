@@ -6,9 +6,11 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.CustomFormats;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Movies;
+using NzbDrone.Core.Movies.AlternativeTitles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -30,6 +32,20 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .CreateNew()
                     .With(s => s.Title = "South Park")
                     .Build();
+
+            _movie.AlternativeTitles.Add(new AlternativeTitle
+            {
+                SourceType = SourceType.Translation,
+                Language = Language.German,
+                Title = "German South Park"
+            });
+
+            _movie.AlternativeTitles.Add(new AlternativeTitle
+            {
+                SourceType = SourceType.Translation,
+                Language = Language.French,
+                Title = "French South Park"
+            });
 
             _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
@@ -119,6 +135,42 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(_movie, _movieFile)
                    .Should().Be("south park");
+        }
+
+        [Test]
+        public void should_replace_translated_movie_title()
+        {
+            _namingConfig.StandardMovieFormat = "{Movie Title:FR}";
+
+            Subject.BuildFileName(_movie, _movieFile)
+                   .Should().Be("French South Park");
+        }
+
+        [Test]
+        public void should_replace_translated_movie_title_with_original_if_no_translation_exists()
+        {
+            _namingConfig.StandardMovieFormat = "{Movie Title:JP}";
+
+            Subject.BuildFileName(_movie, _movieFile)
+                   .Should().Be("South Park");
+        }
+
+        [Test]
+        public void should_replace_translated_movie_title_with_fallback_if_no_translation_exists()
+        {
+            _namingConfig.StandardMovieFormat = "{Movie Title:JP|FR}";
+
+            Subject.BuildFileName(_movie, _movieFile)
+                   .Should().Be("French South Park");
+        }
+
+        [Test]
+        public void should_replace_translated_movie_title_with_original_if_no_translation_or_fallback_exists()
+        {
+            _namingConfig.StandardMovieFormat = "{Movie Title:JP|CN}";
+
+            Subject.BuildFileName(_movie, _movieFile)
+                   .Should().Be("South Park");
         }
 
         [Test]
