@@ -144,7 +144,7 @@ class QueueRow extends Component {
                     movie ?
                       <MovieTitleLink
                         titleSlug={movie.titleSlug}
-                        title={movie.title}
+                        id={movie.id}
                       /> :
                       title
                   }
