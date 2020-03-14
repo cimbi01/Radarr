@@ -286,7 +286,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             if (resource.Videos != null)
             {
-                foreach (VideoResource video in resource.Videos.Results)
+                foreach (var video in resource.Videos.Results)
                 {
                     if (video.Type == "Trailer" && video.Site == "YouTube")
                     {
@@ -308,6 +308,18 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
 
             movie.AlternativeTitles.AddRange(altTitles);
+
+            movie.OriginalLanguage = IsoLanguages.Find(resource.Original_language.ToLower())?.Language ?? Language.English;
+
+            foreach (var spokenLanguage in resource.Spoken_languages)
+            {
+                var mappedLanguage = IsoLanguages.Find(spokenLanguage.Iso_639_1.ToLower())?.Language;
+
+                if (mappedLanguage != null)
+                {
+                    movie.SpokenLanguages.Add(mappedLanguage);
+                }
+            }
 
             var people = new List<Credit>();
 
