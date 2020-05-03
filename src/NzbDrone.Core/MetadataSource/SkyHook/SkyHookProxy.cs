@@ -80,17 +80,13 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
         public Tuple<Movie, List<Credit>> GetMovieInfo(int tmdbId, bool hasPreDBEntry)
         {
-            var langCode = "en";
-
             var request = _movieBuilder.Create()
                .SetSegment("api", "3")
                .SetSegment("route", "movie")
                .SetSegment("id", tmdbId.ToString())
                .SetSegment("secondaryRoute", "")
                .AddQueryParam("append_to_response", "alternative_titles,release_dates,videos,credits,translations")
-               .AddQueryParam("language", langCode.ToUpper())
-
-               // .AddQueryParam("country", "US")
+               .AddQueryParam("language", "en")
                .Build();
 
             request.AllowAutoRedirect = true;
@@ -144,7 +140,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             foreach (var alternativeTitle in resource.Alternative_titles.Titles)
             {
-                if (alternativeTitle.Iso_3166_1.ToLower() == langCode)
+                if (alternativeTitle.Iso_3166_1.ToLower() == "en")
                 {
                     altTitles.Add(new AlternativeTitle(alternativeTitle.Title, SourceType.TMDB, tmdbId, IsoLanguages.Find(alternativeTitle.Iso_3166_1.ToLower())?.Language ?? Language.English));
                 }
@@ -167,7 +163,10 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             movie.TmdbId = tmdbId;
             movie.ImdbId = resource.Imdb_id;
             movie.Title = resource.Original_title;
-            movie.TitleSlug = Parser.Parser.ToUrlSlug(resource.Original_title);
+
+            //Use the english title for the slug so we don't barf on foreign titles
+            movie.TitleSlug = Parser.Parser.ToUrlSlug(resource.Title);
+
             movie.CleanTitle = resource.Original_title.CleanSeriesTitle();
             movie.SortTitle = Parser.Parser.NormalizeTitle(resource.Original_title);
             movie.Overview = resource.Overview;

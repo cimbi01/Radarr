@@ -1,8 +1,9 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -28,12 +29,12 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         [Test]
         public void should_not_delete_unorphaned_pending_items()
         {
-            var series = Builder<Movie>.CreateNew().BuildNew();
+            var movie = Builder<Movie>.CreateNew().With(c => c.OriginalLanguage = Language.English).BuildNew();
 
-            Db.Insert(series);
+            Db.Insert(movie);
 
             var pendingRelease = Builder<PendingRelease>.CreateNew()
-                .With(h => h.MovieId = series.Id)
+                .With(h => h.MovieId = movie.Id)
                 .With(h => h.ParsedMovieInfo = new ParsedMovieInfo())
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();

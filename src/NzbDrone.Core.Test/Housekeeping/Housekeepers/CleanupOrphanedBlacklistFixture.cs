@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         [Test]
         public void should_not_delete_unorphaned_blacklist_items()
         {
-            var movie = Builder<Movie>.CreateNew().BuildNew();
+            var movie = Builder<Movie>.CreateNew().With(c => c.OriginalLanguage = Language.English).BuildNew();
 
             Db.Insert(movie);
 

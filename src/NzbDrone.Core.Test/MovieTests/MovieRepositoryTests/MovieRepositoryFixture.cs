@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.CustomFormats;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Movies;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Test.MovieTests.MovieRepositoryTests
 
             _profileRepository.Insert(profile);
 
-            var movie = Builder<Movie>.CreateNew().BuildNew();
+            var movie = Builder<Movie>.CreateNew().With(c => c.OriginalLanguage = Language.English).BuildNew();
             movie.ProfileId = profile.Id;
 
             Subject.Insert(movie);

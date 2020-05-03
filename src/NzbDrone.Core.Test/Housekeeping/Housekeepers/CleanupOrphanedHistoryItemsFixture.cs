@@ -20,7 +20,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void Setup()
         {
             _movie = Builder<Movie>.CreateNew()
-                                     .BuildNew();
+                                   .With(c => c.OriginalLanguage = Language.English)
+                                   .BuildNew();
         }
 
         private void GivenSeries()

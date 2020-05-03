@@ -62,8 +62,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MovieImport.Aggregation.Aggregators
         [Test]
         public void should_return_file_language_when_file_language_is_higher_than_others()
         {
-            _localMovie.DownloadClientMovieInfo = GetParsedMovieInfo(Language.English);
-            _localMovie.FolderMovieInfo = GetParsedMovieInfo(Language.English);
+            _localMovie.DownloadClientMovieInfo = GetParsedMovieInfo(Language.Unknown);
+            _localMovie.FolderMovieInfo = GetParsedMovieInfo(Language.Unknown);
             _localMovie.FileMovieInfo = GetParsedMovieInfo(Language.French);
 
             Subject.Aggregate(_localMovie, false).Languages.Should().Contain(_localMovie.FileMovieInfo.Languages);

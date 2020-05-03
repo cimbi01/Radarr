@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var movie = Builder<Movie>.CreateNew()
                                           .With(e => e.MovieFileId = movieFiles.First().Id)
+                                          .With(c => c.OriginalLanguage = Language.English)
                                           .BuildNew();
 
             Db.Insert(movie);

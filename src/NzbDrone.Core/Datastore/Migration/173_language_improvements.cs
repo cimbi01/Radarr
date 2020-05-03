@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             // Use original language to set default language fallback for releases
             // Set all to English (1) on migration to ensure default behavior persists until refresh
-            Alter.Table("Movies").AddColumn("OriginalLanguage").AsString().WithDefaultValue(1);
+            Alter.Table("Movies").AddColumn("OriginalLanguage").AsInt32().WithDefaultValue(1);
 
             // Add for future
             Alter.Table("Movies").AddColumn("SpokenLanguages").AsString().WithDefaultValue("[]");
