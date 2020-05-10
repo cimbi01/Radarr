@@ -37,7 +37,7 @@ namespace NzbDrone.Core.NetImport.RadarrList
                 return movies;
             }
 
-            return jsonResponse.SelectList(_skyhookProxy.MapMovie);
+            return jsonResponse.SelectList(m => new Movie { TmdbId = m.id });
         }
 
         protected virtual bool PreProcess(NetImportResponse netImportResponse)

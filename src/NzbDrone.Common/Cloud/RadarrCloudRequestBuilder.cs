@@ -8,6 +8,7 @@ namespace NzbDrone.Common.Cloud
         IHttpRequestBuilderFactory TMDB { get; }
         IHttpRequestBuilderFactory TMDBSingle { get; }
         IHttpRequestBuilderFactory RadarrAPI { get; }
+        IHttpRequestBuilderFactory RadarrMetadata { get; }
     }
 
     public class RadarrCloudRequestBuilder : IRadarrCloudRequestBuilder
@@ -25,6 +26,9 @@ namespace NzbDrone.Common.Cloud
                 .SetHeader("Authorization", $"Bearer {AuthToken}")
                 .CreateFactory();
 
+            RadarrMetadata = new HttpRequestBuilder("http://radarrapi.servarr.com/v1/{route}")
+                .CreateFactory();
+
             RadarrAPI = new HttpRequestBuilder("https://api.radarr.video/v2/{route}/{action}")
                 .CreateFactory();
         }
@@ -32,6 +36,7 @@ namespace NzbDrone.Common.Cloud
         public IHttpRequestBuilderFactory Services { get; private set; }
         public IHttpRequestBuilderFactory TMDB { get; private set; }
         public IHttpRequestBuilderFactory TMDBSingle { get; private set; }
+        public IHttpRequestBuilderFactory RadarrMetadata { get; private set; }
         public IHttpRequestBuilderFactory RadarrAPI { get; private set; }
 
         public string AuthToken => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYTczNzMzMDE5NjFkMDNmOTdmODUzYTg3NmRkMTIxMiIsInN1YiI6IjU4NjRmNTkyYzNhMzY4MGFiNjAxNzUzNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gh1BwogCCKOda6xj9FRMgAAj_RYKMMPC3oNlcBtlmwk";

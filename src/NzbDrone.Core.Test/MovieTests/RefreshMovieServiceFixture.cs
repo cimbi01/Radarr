@@ -33,14 +33,14 @@ namespace NzbDrone.Core.Test.MovieTests
                   .Returns(_movie);
 
             Mocker.GetMock<IProvideMovieInfo>()
-                  .Setup(s => s.GetMovieInfo(It.IsAny<int>(), It.IsAny<bool>()))
+                  .Setup(s => s.GetMovieInfo(It.IsAny<int>()))
                   .Callback<int, bool>((i, b) => { throw new MovieNotFoundException(i); });
         }
 
         private void GivenNewMovieInfo(Movie movie)
         {
             Mocker.GetMock<IProvideMovieInfo>()
-                  .Setup(s => s.GetMovieInfo(_movie.TmdbId, It.IsAny<bool>()))
+                  .Setup(s => s.GetMovieInfo(_movie.TmdbId))
                   .Returns(new Tuple<Movie, List<Credit>>(movie, new List<Credit>()));
         }
 

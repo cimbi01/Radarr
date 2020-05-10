@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         public void Setup()
         {
             UseRealHttp();
-            Mocker.SetConstant<ITmdbConfigService>(Mocker.Resolve<TmdbConfigService>());
         }
 
         [TestCase(11, "Star Wars")]
@@ -24,7 +23,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase(70981, "Prometheus")]
         public void should_be_able_to_get_movie_detail(int tmdbId, string title)
         {
-            var details = Subject.GetMovieInfo(tmdbId, false).Item1;
+            var details = Subject.GetMovieInfo(tmdbId).Item1;
 
             ValidateMovie(details);
 

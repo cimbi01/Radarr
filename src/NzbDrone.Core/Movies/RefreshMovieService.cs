@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Movies
 
             try
             {
-                var tuple = _movieInfo.GetMovieInfo(movie.TmdbId, movie.HasPreDBEntry);
+                var tuple = _movieInfo.GetMovieInfo(movie.TmdbId);
                 movieInfo = tuple.Item1;
                 credits = tuple.Item2;
             }
